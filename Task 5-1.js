@@ -49,4 +49,45 @@ function draw() {
     }
     endShape();
   }
+  drawBoat(mouseX, mouseY, 100, 0);
+}
+
+function drawBoat(x, y, z, rotation) {
+  push();
+  rotate(rotation);
+  translate(x, y, z);
+  fill(150,70,0);
+  
+  beginShape(QUAD_STRIP);
+  vertex(-15, -50, 30);
+  vertex(15, -50, 30);
+  vertex(-20, -30, 0);
+  vertex(20, -30, 0);  
+  vertex(-20, 45, 0);
+  vertex(20, 45, 0);  
+  endShape();
+  
+  beginShape(QUAD_STRIP);
+  vertex(-25, -30, 30);
+  vertex(-20, -30, 0);  
+  vertex(-25, 50, 30);
+  vertex(-20, 45, 0);  
+  vertex(25, 50, 30);
+  vertex(20, 45, 0);  
+  vertex(25, -30, 30);
+  vertex(20, -30, 0);  
+  endShape();
+  
+  beginShape(TRIANGLES);
+  vertex(-15, -50, 30);
+  vertex(-20, -30, 0);
+  vertex(-25, -30, 30);
+  endShape();
+  
+  beginShape(TRIANGLES);
+  vertex(15, -50, 30);
+  vertex(20, -30, 0);
+  vertex(25, -30, 30);
+  endShape();
+  pop();
 }
