@@ -37,15 +37,15 @@ function draw() {
   bAngleY = PI/2-atan2(2*scl, terrain[bX/scl-1][bY/scl] - terrain[bX/scl+1][bY/scl]);
   drawBoat(bX, bY, terrain[bX/scl][bY/scl]+7, bAngleX, bAngleY);
   
-  drawMoon(450, 200, 200, 40, 0);
+  drawMoon(450, 250, 200, 40, 0);
   keyCheck();
 }
 
 function keyCheck() {
-  if (keyIsDown(LEFT_ARROW)) bX += -scl;
-  if (keyIsDown(RIGHT_ARROW)) bX += scl;
-  if (keyIsDown(UP_ARROW)) bY += -scl;
-  if (keyIsDown(DOWN_ARROW)) bY += scl;
+  if (keyIsDown(LEFT_ARROW)&& bX > 20) bX += -scl;
+  if (keyIsDown(RIGHT_ARROW)&& bX < w) bX += scl;
+  if (keyIsDown(UP_ARROW)  && bY > 20) bY += -scl;
+  if (keyIsDown(DOWN_ARROW) && bY < h) bY += scl;
 }
 
 function drawWave() {
@@ -66,6 +66,7 @@ function drawWave() {
   stroke(100, 150, 255);
   fill(0, 140, 255);
   translate(-w/2, -h/2);
+  //ambientMaterial(0, 140, 255);
   
   
   for (let y = 0; y < rows -1; y++) {
@@ -79,8 +80,11 @@ function drawWave() {
 }
 
 function drawBoat(x, y, z, angleX, angleY) {
-  push();
+  push();  
   translate(x, y, z);
+  ambientMaterial(150, 70, 0);
+  ambientLight(100);
+  pointLight(255, 255, 255, bX, bY, 100);
   rotateX(angleX);
   rotateY(angleY);
   fill(150,70,0);
