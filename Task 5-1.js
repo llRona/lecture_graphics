@@ -3,12 +3,20 @@ let scl = 20;
 let w = 1400;
 let h = 1000;
 
+let bX = 700;
+let bY = 500;
+let bAngleX = 0;
+let bAngleY = 0;
+
+let img;
+
 let terrain = [];
 
 let flying = 0;
 
 function setup() {
   createCanvas(600, 600, WEBGL);
+  frameRate(10);
   cols = w / scl;
   rows = h / scl;
 
@@ -21,23 +29,42 @@ function setup() {
 }
 
 function draw() {
+  orbitControl();
   
-  flying -= 0.1;
-  var yoff = flying;
-  for (var y = 0; y < rows; y++) {
+  drawWave();
+  
+  bAngleX = PI/2-atan2(2*scl, terrain[bX/scl][bY/scl+1] - terrain[bX/scl][bY/scl-1]);
+  bAngleY = PI/2-atan2(2*scl, terrain[bX/scl-1][bY/scl] - terrain[bX/scl+1][bY/scl]);
+  drawBoat(bX, bY, terrain[bX/scl][bY/scl]+7, bAngleX, bAngleY);
+  
+  drawMoon(450, 200, 200, 40, 0);
+  keyCheck();
+}
+
+function keyCheck() {
+  if (keyIsDown(LEFT_ARROW)) bX += -scl;
+  if (keyIsDown(RIGHT_ARROW)) bX += scl;
+  if (keyIsDown(UP_ARROW)) bY += -scl;
+  if (keyIsDown(DOWN_ARROW)) bY += scl;
+}
+
+function drawWave() {
+    flying -= 0.1;
+  let yoff = flying;
+  for (let y = 0; y < rows; y++) {
     var xoff = 0;
-    for (var x = 0; x < cols; x++) {
-      terrain[x][y] = map(noise(xoff, yoff), 0, 1, -100, 100);
-      xoff += 0.2;
+    for (let x = 0; x < cols; x++) {
+      terrain[x][y] = map(noise(xoff, yoff), 0, 1, -200, 200);
+      xoff += 0.03;
     }
-    yoff += 0.2;
+    yoff += 0.03;
   }
   
   translate(0,50);
   rotateX(PI/3);
-  background(0);
-  stroke(255);
-  noFill();
+  background(24, 25, 55);
+  stroke(100, 150, 255);
+  fill(0, 140, 255);
   translate(-w/2, -h/2);
   
   
@@ -49,14 +76,15 @@ function draw() {
     }
     endShape();
   }
-  drawBoat(mouseX, mouseY, 100, 0);
 }
 
-function drawBoat(x, y, z, rotation) {
+function drawBoat(x, y, z, angleX, angleY) {
   push();
-  rotate(rotation);
   translate(x, y, z);
+  rotateX(angleX);
+  rotateY(angleY);
   fill(150,70,0);
+  stroke(2);
   
   beginShape(QUAD_STRIP);
   vertex(-15, -50, 30);
@@ -89,5 +117,18 @@ function drawBoat(x, y, z, rotation) {
   vertex(20, -30, 0);
   vertex(25, -30, 30);
   endShape();
+  pop();
+}
+
+function drawMoon(x, y, z, size, light) {
+  push();
+  translate(x, y, z);
+  noStroke();
+  fill(255, 255, 20);
+  
+  sphere(size);
+  
+  ambientLight(255, 255, 255);
+  pointLight(255, 255, 255, 0, 0, 100);
   pop();
 }
